@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Business - DNBC Global News</title>
+
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: #667eea;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .site-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .site-subtitle {
+            font-size: 0.9em;
+            color: #666;
+            flex-basis: 100%;
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+        }
+
+        nav ul li a {
+            padding: 8px 12px;
+            display: block;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover {
+            background-color: #667eea;
+            color: white;
+            border-radius: 4px;
+        }
+
+        /* Responsive nav toggle button */
+        #nav-toggle {
+            font-size: 28px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #667eea;
+            display: none;
+        }
+
+        /* Sticky header */
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #667eea;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.85;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px 60px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.05);
+            width: 180px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /* News Card */
+        .news-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .news-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .news-card-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-card-content h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .news-card-content .date {
+            font-size: 0.85em;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .news-card-content p {
+            flex-grow: 1;
+            margin-bottom: 12px;
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .news-card-content ul {
+            margin-bottom: 12px;
+            color: #555;
+            font-size: 0.9em;
+            padding-left: 20px;
+        }
+
+        .read-more {
+            align-self: flex-start;
+            font-weight: 600;
+            color: #667eea;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .read-more:hover {
+            color: #4353b3;
+        }
+
+        /* Show More / Show Less Buttons */
+        .toggle-section-btn {
+            display: block;
+            margin: 30px auto 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-section-btn:hover {
+            background: #4353b3;
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: #ccc;
+            padding: 40px 20px 20px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: space-between;
+        }
+
+        .footer-section {
+            flex: 1 1 200px;
+        }
+
+        .footer-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .footer-section p,
+        .footer-section ul {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: #ccc;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #667eea;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: 25px;
+            color: #777;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                background: white;
+                position: absolute;
+                top: 70px;
+                right: 20px;
+                border-radius: 6px;
+                width: 180px;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+                z-index: 10000;
+            }
+
+            nav ul li {
+                margin: 0;
+            }
+
+            nav ul li a {
+                padding: 12px 15px;
+            }
+
+            #nav-toggle {
+                display: block;
+            }
+
+            .site-subtitle {
+                flex-basis: 100%;
+                margin: 10px 0 0 0;
+                text-align: center;
+            }
+
+            .header-container {
+                justify-content: space-between;
+            }
+        }
+
+        /* Back to Top Button */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: none;
+            background: #667eea;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 9999;
+            font-size: 18px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+
+        #backToTop:hover {
+            background: #4353b3;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="header-container">
+            <div class="site-title">🌍 DNBC Global News</div>
+            <button id="nav-toggle" aria-label="Toggle navigation">☰</button>
+            <div class="site-subtitle">Bringing you the latest news from around the world</div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="today-in-world.html">Today in World</a></li>
+                    <li><a href="sports.html">Sports</a></li>
+                    <li><a href="business.html">Business</a></li>
+                    <li><a href="top-cities.html">Top Cities</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Business & Markets</h1>
+        <p>Financial news, market analysis, and corporate updates</p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2 class="section-title">💼 Business Headlines</h2>
+
+        <!-- Market Overview -->
+        <section style="margin-top: 40px;">
+            <h3 style="color: #667eea; font-size: 1.8em; margin-bottom: 20px;">Market Overview</h3>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number">+2.8%</div>
+                    <div class="stat-label">Global Market Growth</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">$95T</div>
+                    <div class="stat-label">Global Market Cap</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">+4.2%</div>
+                    <div class="stat-label">Tech Sector YTD</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">2.1%</div>
+                    <div class="stat-label">Average Inflation Rate</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Business Stories -->
+        <section id="featured-stories" style="margin-top: 60px;">
+            <h3 style="color: #667eea; font-size: 1.8em; margin-bottom: 20px;">Featured Stories</h3>
+            <div class="news-grid">
+                <article class="news-card">
+                    <img src="../images/tech-earnings.jpg" alt="Tech Company" />
+                    <div class="news-card-content">
+                        <h3>Tech Giant Reports Record Quarterly Earnings</h3>
+                        <div class="date">January 5, 2026</div>
+                        <p>A leading technology company announced record-breaking quarterly results driven by robust demand
+                            for cloud services and enterprise software. The company exceeded analyst expectations by 18%,
+                            demonstrating strong market position and resilient business fundamentals despite economic
+                            uncertainties.</p>
+                        <p><strong>Financial Highlights:</strong></p>
+                        <ul>
+                            <li>Revenue: $87.5 billion (+23% YoY)</li>
+                            <li>Net Income: $28.3 billion</li>
+                            <li>EPS: $4.85 (beats estimates by 12%)</li>
+                            <li>Guidance raised for next quarter</li>
+                        </ul>
+                        <a href="#" class="read-more">Full Story →</a>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <img src="../images/merger-acquisition.jpg" alt="M&A" />
+                    <div class="news-card-content">
+                        <h3>Major Merger Creates $2 Trillion Financial Giant</h3>
+                        <div class="date">January 4, 2026</div>
+                        <p>Two of the world's largest financial institutions have announced a transformative merger that will
+                            create a banking powerhouse with combined assets exceeding $2 trillion. The strategic
+                            combination will enhance market position, expand service offerings, and create significant
+                            synergies in operations and technology.</p>
+                        <p><strong>Deal Details:</strong></p>
+                        <ul>
+                            <li>Combined assets: $2.3 trillion</li>
+                            <li>Transaction value: $85 billion</li>
+                            <li>Estimated cost synergies: $8 billion annually</li>
+                            <li>Regulatory approval expected Q2 2026</li>
+                        </ul>
+                        <a href="#" class="read-more">Full Story →</a>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <img src="../images/startup-unicorn.jpg" alt="Startup" />
+                    <div class="news-card-content">
+                        <h3>Fintech Startup Raises $2 Billion, Reaches Unicorn Status</h3>
+                        <div class="date">January 3, 2026</div>
+                        <p>A groundbreaking fintech startup has completed a Series D funding round that values the company at
+                            $10 billion, achieving unicorn status faster than any other financial services company. The
+                            achievement reflects strong market demand for innovative payment and financial management
+                            solutions in the digital economy.</p>
+                        <p><strong>Funding Information:</strong></p>
+                        <ul>
+                            <li>Funding raised: $2 billion (Series D)</li>
+                            <li>Post-money valuation: $10 billion</li>
+                            <li>Time to unicorn: 6 years (fastest in category)</li>
+                            <li>Customer base: 50 million users globally</li>
+                        </ul>
+                        <a href="#" class="read-more">Full Story →</a>
+                    </div>
+                </article>
+            </div>
+            <button class="toggle-section-btn" data-target="#featured-stories" data-action="hide">Show Less ▲</button>
+        </section>
+
+        <!-- Technology & Innovation -->
+        <section id="tech-innovation" style="margin-top: 60px;">
+            <h3 style="color: #667eea; font-size: 1.8em; margin-bottom: 20px;">Technology & Innovation</h3>
+            <div class="news-grid">
+                <article class="news-card">
+                    <img src="../images/ai-revolution.jpg" alt="AI" />
+                    <div class="news-card-content">
+                        <h3>AI Technology Transforms Enterprise Software Market</h3>
+                        <div class="date">January 5, 2026</div>
+                        <p>Artificial intelligence is revolutionizing enterprise software with companies reporting significant
+                            productivity gains and cost savings. Major software vendors have integrated advanced AI
+                            capabilities into their platforms, enabling businesses to automate complex processes and gain
+                            competitive advantages.</p>
+                        <p><strong>Market Impact:</strong></p>
+                        <ul>
+                            <li>AI software market growing 45% annually</li>
+                            <li>Average productivity boost: 35%</li>
+                            <li>Enterprise spending on AI: $500 billion annually</li>
+                            <li>400,000+ new AI-related jobs created</li>
+                        </ul>
+                        <a href="#" class="read-more">Full Story →</a>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <img src="../images/quantum-computing.jpg" alt="Quantum" />
+                    <div class="news-card-content">
+                        <h3>Quantum Computing Breakthrough Solves Major Challenge</h3>
+                        <div class="date">January 4, 2026</div>
+                        <p>Researchers have achieved a major breakthrough in quantum computing, successfully solving complex
+                            problems that were previously unsolvable with classical computers. The advancement brings
+                            practical quantum computing applications significantly closer to commercial viability in
+                            pharmaceuticals, materials science, and optimization.</p>
+                        <p><strong>Technical Achievement:</strong></p>
+                        <ul>
+                            <li>Quantum advantage demonstrated for 50+ problems</li>
+                            <li>Error correction rate: 99.2% (vs 75% previous)</li>
+                            <li>Next-gen quantum chips expected in 2027</li>
+                            <li>Investment in quantum tech reaches $12 billion</li>
+                        </ul>
+                        <a href="#" class="read-more">Full Story →</a>
+                    </div>
+                </article>
+            </div>
+            <button class="toggle-section-btn" data-target="#tech-innovation" data-action="hide">Show Less ▲</button>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h3>About DNBC Global News</h3>
+                <p>DNBC Global News is a premier news agency dedicated to bringing you the latest in business, technology,
+                    sports, and world affairs. Our mission is to deliver accurate and timely news to inform and empower
+                    our audience worldwide.</p>
+            </div>
+
+            <div class="footer-section quick-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="today-in-world.html">Today in World</a></li>
+                    <li><a href="sports.html">Sports</a></li>
+                    <li><a href="business.html">Business</a></li>
+                    <li><a href="top-cities.html">Top Cities</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section contact">
+                <h3>Contact Us</h3>
+                <p>Email: info@dnbcglobalnews.com</p>
+                <p>Phone: +1 555-123-4567</p>
+                <p>Address: 123 News Ave, Media City, USA</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; <span id="footerYear">2026</span> DNBC Global News. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" aria-label="Back to Top">↑ Top</button>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Responsive nav toggle button
+            $("#nav-toggle").click(function () {
+                $("header nav ul").slideToggle(300);
+            });
+
+            // Reset nav menu on resize
+            $(window).resize(function () {
+                if ($(window).width() > 768) {
+                    $("header nav ul").show();
+                } else {
+                    $("header nav ul").hide();
+                }
+            }).trigger('resize');
+
+            // Smooth scroll for nav links
+            $("header nav a").click(function (e) {
+                const target = $(this).attr("href");
+                if (target.startsWith("#") && $(target).length) {
+                    e.preventDefault();
+                    $("html, body").animate({ scrollTop: $(target).offset().top - 70 }, 600);
+                }
+            });
+
+            // Sticky header on scroll
+            $(window).scroll(function () {
+                if ($(window).scrollTop() > 100) {
+                    $("header").addClass("sticky-header");
+                } else {
+                    $("header").removeClass("sticky-header");
+                }
+
+                // Back to top button toggle
+                if ($(this).scrollTop() > 200) {
+                    $("#backToTop").fadeIn();
+                } else {
+                    $("#backToTop").fadeOut();
+                }
+
+                // Animate news cards when scrolled into view
+                $(".news-card").each(function () {
+                    const cardTop = $(this).offset().top;
+                    const scrollBottom = $(window).scrollTop() + $(window).height();
+                    if (scrollBottom > cardTop + 100) {
+                        $(this).addClass("visible");
+                    }
+                });
+            });
+
+            // Back to top button click
+            $("#backToTop").click(function () {
+                $("html, body").animate({ scrollTop: 0 }, 600);
+            });
+
+            // Show/Hide toggle buttons functionality
+            $(".toggle-section-btn").click(function () {
+                const targetSelector = $(this).attr("data-target");
+                const action = $(this).attr("data-action");
+                const targetSection = $(targetSelector);
+                if (action === "hide") {
+                    // Hide all news cards inside the section except first 2
+                    targetSection.find(".news-card").slice(2).slideUp(400);
+                    $(this).text("Show More ▼");
+                    $(this).attr("data-action", "show");
+                } else {
+                    // Show all news cards inside the section
+                    targetSection.find(".news-card").slideDown(400);
+                    $(this).text("Show Less ▲");
+                    $(this).attr("data-action", "hide");
+                }
+            });
+
+            // On page load, hide news cards except first 2 in each section
+            $(".news-grid").each(function () {
+                $(this).find(".news-card").slice(2).hide();
+            });
+
+            // Footer year update
+            $("#footerYear").text(new Date().getFullYear());
+        });
+    </script>
+</body>
+
+</html>
